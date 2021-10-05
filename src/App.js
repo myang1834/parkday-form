@@ -1,4 +1,4 @@
-import React, { Component, useState} from 'react'
+import React, { Component, useState, useRef} from 'react'
 import './App.css';
 import {Field, Formik, useFormik, useField, useFormikContext } from 'formik';
 import TextSubmit from './Components/TextSubmit';
@@ -24,46 +24,32 @@ const DatePicker2 = ({ ...props }) => {
 
 
 
-class App extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      value: new Date(),
-      addNewDish: false,
-      dishCount: 0
-    }
-    this.onSubmit = this.onSubmit.bind(this)
-
-  }
-
-  addDish = () =>{
-
-    console.log('add new dish')
-    this.setState((prevState) => ({
-      dishCount: prevState.dishCount + 1
-  })); 
-   
-  }
-
-  handleSubmit = () => {
-    console.log('Form data')
-  }
-
-  onSubmit = (values, actions) => {
-             
-    alert(JSON.stringify(values, null, 2));
-    actions.setSubmitting(false);
+function App() {
  
-}
 
-  render(){
+  let [date, setDate] = useState(new Date())
+  let [dishCount, setCount] = useState(1)
+  const [value, setValue] =  useState("");
+  let photos = []
+  const dishNames = ['dish3', 'dish2', 'dish1', 'dish0']
+  const myObj = {dishName: 'hello', tasteName: 1}
+
+  function addDish (){
     
+    setCount(dishCount + 1)
+   
+
+
+  }
+
+  const fileRef = useRef();
+
     return (
       <div className = "container">
          
         <Formik 
            initialValues = {{
-             date: this.state.value,
+             date: date,
              whatWentWell: '',
              whatWentWrong: '',
              howCanWeDoEvenBetter: '',
@@ -71,20 +57,25 @@ class App extends Component {
              orderDetails: '',
              yield: '',
              orderTotals: '',
-             dish: '',
-             taste: '',
-             dishnotes: ''
+             file: null,
+             test: ''
          
             }}
            onSubmit = {(values, actions) => {
              
-                  alert(JSON.stringify(values, null, 2));
+                if(values.file === null){
+                  alert(JSON.stringify(values, null, 2) );
+
+                }else{
+                alert(JSON.stringify(values, null, 2) + '\n' + '"file:" ' + values.file.name + '\n' + '"type:" '+ values.file.type + '\n' + '"size:" ' + `${values.file.size} bytes`);
                   actions.setSubmitting(false);
-               
+                  console.log(values.file)
+                }
+   
             }}
             >
-            {props => (
-          <form onSubmit = {props.handleSubmit}>
+            {({setFieldValue, handleSubmit, handleChange}) => (
+          <form onSubmit = {handleSubmit}>
             <h3 className="meetingsh1">Date</h3>
             <DatePicker2 name = 'date'></DatePicker2>           
             
@@ -98,58 +89,31 @@ class App extends Component {
               <h2 className="meetingsh1">Dish Ratings</h2>
 
               <div>
-                <h3>Dish</h3>
-                <Field
-                        name = 'dish'
-                        component="textarea"
-                        rows="1"
-                        style={{
-                            padding: 10,
-                            borderColor: 'silver',
-                            borderWidth: 0.3,
-                            borderRadius: 5,
-                            borderStyle: 'solid',
-                        }}
-               />   
-             </div>
-             <div>
-                <h3>Taste</h3>
-                <input
-                    name="taste"
-                    type="number"
-                    onChange={props.handleChange}
-                    placeholder = 'Rating 1-5'
-                    style={{
-                            padding: 10,
-                            borderColor: 'silver',
-                            borderWidth: 0.3,
-                            borderRadius: 5,
-                            borderStyle: 'solid',
-                    }}
-                  />
-             </div>
-             <div>
-                <h3>Notes</h3>
-                <Field
-                        name = 'dishnotes'
-                        component="textarea"
-                        rows="4"
-                        style={{
-                            padding: 10,
-                            borderColor: 'silver',
-                            borderWidth: 0.3,
-                            borderRadius: 5,
-                            borderStyle: 'solid',
-                        }}
-               />   
-             </div>
-             { Array(this.state.dishCount).fill(<div><DishRating/></div>) }
-
-             <div>
-                <p onClick={() => {this.addDish()}}>Add New Dish</p>
+                <p onClick={() => {addDish()}}>Add New Dish, the count is {dishCount}</p>
             </div>
 
-            <button onClick = {this.handleSubmit}
+ 
+      {/*There is a problem with using the name variable and trying to dynamically name the inputs, need a way to log state and reference it */}            
+      {/*Array(dishCount).fill(
+        <div>
+          <DishRating name = {dishNames[dishCount]} tasteName = {'taste' + dishCount} notesName = {'notes' + dishCount} handleChange = {handleChange} />  
+              <input id="file" name="file" type="file" onChange={(event) => {
+                setFieldValue("file", event.currentTarget.files[0]);
+              }} />
+
+        </div>)*/}
+
+      
+      {Array.from({length:dishCount}, () => <div>
+          <DishRating dishName = {'dishName' + dishCount.toString()} tasteName = {'taste' + dishCount} notesName = {'notes' + dishCount} handleChange = {handleChange} />  
+              <input id="file" name="file" type="file" onChange={(event) => {
+                setFieldValue('file', event.currentTarget.files[0]);
+          
+              }} />
+
+        </div>)}
+
+      <button 
               style={{
                 borderRadius: 10,
                 backgroundColor: '#e55454',
@@ -157,9 +121,9 @@ class App extends Component {
                 marginTop: 10,
                 marginBottom: 10,
               }}
-                type="submit">
-                  Submit
-            </button>
+         type="submit">
+          Submit
+      </button>
             
             
           </form>
@@ -172,8 +136,9 @@ class App extends Component {
       </div>
       
 
-    )}  
-}
+    )
+  }  
+
     
      
 

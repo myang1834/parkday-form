@@ -29,17 +29,26 @@ function App() {
 
   let [date, setDate] = useState(new Date())
   let [dishCount, setCount] = useState(1)
-  const [value, setValue] =  useState("");
-  let photos = []
-  const dishNames = ['dish3', 'dish2', 'dish1', 'dish0']
-  const myObj = {dishName: 'hello', tasteName: 1}
-
+  let [photos, setPhotos] = useState([])
+  const pStyles = {
+    backgroundColor: 'red',
+    paddingTop: 2,
+    paddingLeft: 6,
+    paddingRight: 6,
+    paddingBottom:2,
+    borderTop: 1 ,
+    borderTopColor: 'blue',
+    borderRight: 1 ,
+    borderRightColor: 'blue',
+    borderBottom: 1 ,
+    borderBottomColor: '#333333',
+    borderLeft: 1 ,
+    borderLeftColor: '#CCCCCC'
+  }
+  
+ 
   function addDish (){
-    
     setCount(dishCount + 1)
-   
-
-
   }
 
   const fileRef = useRef();
@@ -54,11 +63,13 @@ function App() {
              whatWentWrong: '',
              howCanWeDoEvenBetter: '',
              dailyGeneral: '',
+             protein1: '',
+             protein2: '',
+             vegan: '',
              orderDetails: '',
-             yield: '',
              orderTotals: '',
              file: null,
-             test: ''
+             
          
             }}
            onSubmit = {(values, actions) => {
@@ -70,6 +81,7 @@ function App() {
                 alert(JSON.stringify(values, null, 2) + '\n' + '"file:" ' + values.file.name + '\n' + '"type:" '+ values.file.type + '\n' + '"size:" ' + `${values.file.size} bytes`);
                   actions.setSubmitting(false);
                   console.log(values.file)
+                  console.log(values.file[0])
                 }
    
             }}
@@ -84,15 +96,28 @@ function App() {
               <TextSubmit text = 'How can we do even better?' name = {'howCanWeDoEvenBetter'}/>
               <TextSubmit text = 'Daily General' name = {'dailyGeneral'}/>
               <TextSubmit text = 'Order Details' name = {'orderDetails'}/>
-              <TextSubmit text = 'Yield' name = {'yield'}/>
+              <h2>Yield</h2> 
+              <h3>Protein 1</h3>
+                <Field name = {'protein1'} type = 'number' placeholder = '# dishes served'/> 
+              <h3>Protein 2</h3> 
+               <Field name = {'protein2'} type = 'number' placeholder = '# dishes served'/> 
+
+              <h3>Vegan</h3> 
+               <Field name = {'vegan'} type = 'number' placeholder = '# dishes served'/> 
+
+
+ 
+              
+              {/*<TextSubmit text = 'Yield' name = {'yield'}/>*/}
+              
+
+
+
+
               <TextSubmit text = 'Order Totals' name = {'orderTotals'}/>
               <h2 className="meetingsh1">Dish Ratings</h2>
 
-              <div>
-                <p onClick={() => {addDish()}}>Add New Dish, the count is {dishCount}</p>
-            </div>
-
- 
+           
       {/*There is a problem with using the name variable and trying to dynamically name the inputs, need a way to log state and reference it */}            
       {/*Array(dishCount).fill(
         <div>
@@ -108,10 +133,21 @@ function App() {
           <DishRating dishName = {'dishName' + dishCount.toString()} tasteName = {'taste' + dishCount} notesName = {'notes' + dishCount} handleChange = {handleChange} />  
               <input id="file" name="file" type="file" onChange={(event) => {
                 setFieldValue('file', event.currentTarget.files[0]);
+               
+            /*    const files = event.target.files
+                for(let i = 0; files.length; i++){
+                  FormData.append(`images[${i}]`, files[i])             */
+                  }
           
-              }} />
+              } />
 
         </div>)}
+
+        <div>
+                <p onClick={() => {addDish()}}>Add New Dish</p>
+        </div>
+
+ 
 
       <button 
               style={{
@@ -138,6 +174,8 @@ function App() {
 
     )
   }  
+
+
 
     
      

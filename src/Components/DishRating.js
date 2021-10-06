@@ -37,12 +37,12 @@ const DishRating = (props) => {
              </div>
              <div>
                 <h3>Notes</h3>
-                <input
+                <textarea
                         name = {props.notesName}
 
                         onChange={props.handleChange}
 
-                        rows="4"
+                        rows="5"
                         style={{
                             padding: 10,
                             borderColor: 'silver',

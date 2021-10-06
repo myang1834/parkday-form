@@ -117,16 +117,7 @@ function App() {
               <TextSubmit text = 'Order Totals' name = {'orderTotals'}/>
               <h2 className="meetingsh1">Dish Ratings</h2>
 
-           
-      {/*There is a problem with using the name variable and trying to dynamically name the inputs, need a way to log state and reference it */}            
-      {/*Array(dishCount).fill(
-        <div>
-          <DishRating name = {dishNames[dishCount]} tasteName = {'taste' + dishCount} notesName = {'notes' + dishCount} handleChange = {handleChange} />  
-              <input id="file" name="file" type="file" onChange={(event) => {
-                setFieldValue("file", event.currentTarget.files[0]);
-              }} />
-
-        </div>)*/}
+      
 
       
       {Array.from({length:dishCount}, () => <div>
@@ -134,9 +125,7 @@ function App() {
               <input id="file" name="file" type="file" onChange={(event) => {
                 setFieldValue('file', event.currentTarget.files[0]);
                
-            /*    const files = event.target.files
-                for(let i = 0; files.length; i++){
-                  FormData.append(`images[${i}]`, files[i])             */
+    
                   }
           
               } />

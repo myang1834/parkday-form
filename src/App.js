@@ -45,11 +45,10 @@ function App() {
   }
 
   const dishRatingChange = () => {
-    console.log('hi')
-    const newDish = Object.create(dish)
-    dishes.push(newDish)
-    console.log(dishes)
-    console.log(dishes.length)
+    //const newDish = Object.create(dish)
+   // dishes.push(newDish)
+   // console.log(dishes)
+    //console.log(dishes.length)
 
 
   }
@@ -77,7 +76,36 @@ function App() {
            onSubmit = {(values, actions) => {
              
                 if(values.file === null){
-                  alert(JSON.stringify(values, null, 2) );
+                    const vals = ref.current.values
+                    console.log(vals)
+                    let objLen = Object.keys(vals).length
+                    console.log(Object.keys(vals))
+                    let keys1 = Object.keys(vals)
+                    let newDish = Object.create(null)
+                    
+
+                  for(let i = 0; i < objLen; i++){
+                    if(keys1[i].includes('dishName')){
+                      newDish.dishName = vals[keys1[i]]
+                      dishes.push({dishName: vals[keys1[i]]})
+                    }
+                    if(keys1[i].includes('tasteName')){
+                      dishes.push({tasteName: vals[keys1[i]]})
+                    }
+                    if(keys1[i].includes('notesName')){
+                      dishes.push({notesName: vals[keys1[i]]})
+                    }
+                     console.log(dishes)
+                     console.log(newDish)
+                    //const newDish = Object.create(dish)
+                    //newDish.dishName = ref.current.values.dishName2
+                    //dishes.push(newDish)
+
+                  }
+                 
+                  
+                  //console.log(dishes)
+                  alert(JSON.stringify(values, null, 2) + JSON.stringify(dishes));
 
                 }else{
                   alert(JSON.stringify(values, null, 2) + '\n' + '"file:" ' + values.file.name + '\n' + '"type:" '+ values.file.type + '\n' + '"size:" ' + `${values.file.size} bytes`);
@@ -115,7 +143,7 @@ function App() {
 
           
                   {Array.from({length:dishCount}, () => <div>
-                      <DishRating dishName = {'dishName' /*+ dishCount.toString()*/} tasteName = {'taste' + dishCount} notesName = {'notes' + dishCount} handleChange = {handleChange} />  
+                      <DishRating dishName = {'dishName' + dishCount.toString()} tasteName = {'taste' + dishCount.toString()} notesName = {'notes' + dishCount.toString()} handleChange = {handleChange} />  
                           {dishRatingChange()}
                           <input id="file" name="file" type="file" onChange={(event) => {
                             dish.photo = event.currentTarget.files[0]

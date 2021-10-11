@@ -8,6 +8,7 @@ const DishRating = (props) => {
             <input
                 name = {props.dishName}
                 onChange={props.handleChange}
+                
 
                 rows="1"
                 style={{
